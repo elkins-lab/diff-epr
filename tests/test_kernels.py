@@ -1,7 +1,6 @@
 import jax
 import jax.numpy as jnp
-
-from diff_epr.kernels import deer_trace, spin_distance
+from diff_epr.kernels import spin_distance, deer_trace, deer_trace_oriented
 
 
 def test_epr_basic():
@@ -49,3 +48,19 @@ def test_deer_dipolar_parity():
     # We set background_decay=0 for parity check
     trace = deer_trace(distances, time, modulation_depth=0.3, background_decay=0.0)
     assert jnp.allclose(trace[0], 0.96933, atol=1e-4)
+
+
+def test_deer_trace_oriented():
+    """
+    Verify that oriented DEER simulation runs and behaves reasonably.
+    """
+    dist = 30.0
+    orientation = jnp.zeros(5)  # (theta_r1, phi_r1, alpha, beta, gamma)
+    time = jnp.linspace(0, 2.0, 10)
+    
+    trace = deer_trace_oriented(dist, orientation, time)
+    assert trace.shape == (10,)
+    assert jnp.allclose(trace[0], 1.0)
+    # Powder pattern average should differ slightly from fixed perpendicular edge
+    trace_standard = deer_trace(jnp.array([dist]), time, background_decay=0.0)
+    assert not jnp.allclose(trace, trace_standard)
