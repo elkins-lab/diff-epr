@@ -11,6 +11,7 @@
 ## 🎯 Features
 
 - **Spin-Label Modeling:** Differentiable distance calculations between paramagnetic centers.
+- **Orientation Selection:** Support for the **Polyhach 5-angle formula** (Polyhach et al., 2007) to model relative domain orientations.
 - **Time-Domain Simulation:** Simulate DEER modulation traces $V(t)$ with parameterizable background decay and modulation depth.
 - **Rotamer Library Integration:** Support for weighted rotamer averages in distance distribution calculations.
 - **Hardware Acceleration:** GPU-optimized distance kernels via JAX.

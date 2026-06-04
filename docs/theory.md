@@ -4,14 +4,12 @@
 
 Double Electron-Electron Resonance (DEER) measures the dipolar coupling between two spin labels (e.g., nitroxide labels). The coupling frequency $\omega$ is inversely proportional to the cube of the distance $r$:
 
-$$\omega \propto \frac{1}{r^3}$$
+$$\omega(\theta) = \frac{C}{r^3} (1 - 3\cos^2\theta)$$
 
-## Time-Domain Signal
+where $C \approx 52,040$ MHz·Å³ is the dipolar coupling constant and $\theta$ is the angle between the inter-spin vector and the external magnetic field $B_0$.
 
-The normalized DEER signal $V(t)$ for a pair of spins is given by:
+## Orientation Selection
 
-$$V(t) = V_{inter}(t) \cdot [1 - \lambda(1 - \cos(\omega t))]$$
+In high-field EPR, pulses excite only a subset of possible label orientations. **diff-epr** implements the **Polyhach (2007)** geometric model, which describes the mutual orientation of two labels using five independent angles ($\theta_{r1}, \phi_{r1}, \alpha, \beta, \gamma$).
 
-where $\lambda$ is the modulation depth and $V_{inter}(t)$ represents the background decay from intermolecular interactions. **diff-epr** models this background as an exponential decay:
-
-$$V_{inter}(t) = \exp(-k \cdot t)$$
+This allows for the modeling of rigid complexes where the relative 3D orientation of domains, not just their distance, is of interest.

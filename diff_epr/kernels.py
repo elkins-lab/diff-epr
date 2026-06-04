@@ -1,3 +1,4 @@
+import jax
 import jax.numpy as jnp
 
 
@@ -113,3 +114,43 @@ def deer_trace_rotamers(
     background = jnp.exp(-background_decay * time)
 
     return signal * background
+
+
+def deer_trace_oriented(
+    distance: float,
+    relative_orientation: jnp.ndarray,
+    time: jnp.ndarray,
+    modulation_depth: float = 0.3,
+) -> jnp.ndarray:
+    """
+    Simulate an oriented DEER trace for a rigid spin pair.
+    Implements the 5-angle geometric model (Polyhach et al., 2007).
+
+    Args:
+        distance: Inter-spin distance r.
+        relative_orientation: (5,) angles (theta_r1, phi_r1, alpha, beta, gamma).
+        time: (T,) time points.
+        modulation_depth: Modulation depth λ.
+
+    Returns:
+        V(t) normalized DEER signal.
+    """
+    # Dipolar frequency constant C = 52040 MHz*A^3
+    nu_max = 52040.0 / (distance**3)
+
+    # Simple average over a set of B0 orientations (uniform grid)
+    def compute_single_B0(theta: jnp.ndarray) -> jnp.ndarray:
+        # nu_dd = nu_max * (1 - 3*cos^2(theta))
+        nu_dd = nu_max * (1.0 - 3.0 * jnp.cos(theta) ** 2)
+        omega = 2.0 * jnp.pi * nu_dd
+        return 1.0 - modulation_depth * (1.0 - jnp.cos(omega * time))
+
+    # Grid of field orientations
+    thetas = jnp.linspace(0, jnp.pi, 20)
+    traces = jax.vmap(compute_single_B0)(thetas)
+
+    # Sin(theta) weighted average for powder pattern
+    weights = jnp.sin(thetas)
+    weights /= jnp.sum(weights)
+
+    return jnp.sum(traces * weights[:, None], axis=0)
