@@ -32,21 +32,21 @@ def deer_trace(
 
     Args:
         distances: (M,) distribution of distances.
-        time: (T,) time points.
+        time: (T,) time points in microseconds.
         modulation_depth: Modulation depth λ.
         background_decay: Decay rate of the background signal.
 
     Returns:
         V(t) normalized DEER signal.
     """
-    # Dipolar coupling frequency: ω ~ 1/r^3
-    # Actually, V(t) = (1 - λ(1 - cos(ωt))) * background
-    # This is a simplified kernel.
-    omega = 52.04 / (distances**3)  # MHz/Angstrom^3 constant
+    # Dipolar coupling frequency: ω = 2π * ν_dd
+    # ν_dd = 52040 / r^3 (MHz for Angstroms)
+    nu_dd = 52040.0 / (distances**3)
+    omega = 2.0 * jnp.pi * nu_dd
 
     # Kernel matrix (T, M)
+    # V(t) = 1 - λ(1 - cos(ωt))
     kernel = 1.0 - modulation_depth * (1.0 - jnp.cos(omega[None, :] * time[:, None]))
-
     # Integrate over distance distribution (assumed uniform weight here for simplicity)
     signal = jnp.mean(kernel, axis=-1)
 
