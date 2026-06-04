@@ -86,7 +86,13 @@ def deer_trace_rotamers(
     dist = jnp.sqrt(jnp.sum(diff**2, axis=-1) + 1e-9)
 
     # 2. Compute pairwise weights (N1, N2)
-    p_ij = weights1[:, None] * weights2[None, :,]
+    p_ij = (
+        weights1[:, None]
+        * weights2[
+            None,
+            :,
+        ]
+    )
 
     # 3. Simulate DEER kernel for each distance
     # Reshape distances to 1D for deer_trace (N1*N2,)
@@ -107,4 +113,3 @@ def deer_trace_rotamers(
     background = jnp.exp(-background_decay * time)
 
     return signal * background
-

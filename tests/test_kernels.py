@@ -24,8 +24,13 @@ def test_epr_differentiable():
     distances = jnp.array([30.0, 40.0])
     time = jnp.linspace(0, 2.0, 100)
 
-    def loss(x):
+    def loss(x: jnp.ndarray) -> jnp.ndarray:
         return jnp.sum(deer_trace(x, time))
+
+    grads = jax.grad(loss)(distances)
+    assert grads.shape == distances.shape
+    assert not jnp.any(jnp.isnan(grads))
+
 
 def test_deer_dipolar_parity():
     """
@@ -35,12 +40,12 @@ def test_deer_dipolar_parity():
     # nu_dd = 52040 / 30^3 = 52040 / 27000 = 1.9274 MHz
     distances = jnp.array([30.0])
     time = jnp.array([1.0])  # 1.0 microseconds
-    
+
     # Trace V(t) = 1 - λ(1 - cos(2π * nu_dd * t))
     # omega = 2 * pi * 1.9274 = 12.1101 rad/us
     # cos(12.1101) = 0.89776
     # V(1.0) = 1 - 0.3(1 - 0.89776) = 1 - 0.3(0.10224) = 0.96933
-    
+
     # We set background_decay=0 for parity check
     trace = deer_trace(distances, time, modulation_depth=0.3, background_decay=0.0)
     assert jnp.allclose(trace[0], 0.96933, atol=1e-4)
