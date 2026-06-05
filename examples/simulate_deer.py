@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 
-from diff_epr.kernels import deer_trace
+from diff_epr import deer_trace
 
 
-def main():
+def main() -> None:
     # 1. Distance distribution P(r) - two peaks
     distances = jnp.array([30.0, 32.0, 35.0, 45.0, 47.0])
 

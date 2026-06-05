@@ -3,7 +3,7 @@ import jax.numpy as jnp
 from diff_epr.kernels import deer_trace_rotamers
 
 
-def test_deer_rotamers():
+def test_deer_rotamers() -> None:
     """
     Verify that weighted rotamer simulation runs.
     """
