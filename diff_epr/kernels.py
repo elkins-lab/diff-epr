@@ -123,34 +123,45 @@ def deer_trace_oriented(
     modulation_depth: float = 0.3,
 ) -> jnp.ndarray:
     """
-    Simulate an oriented DEER trace for a rigid spin pair.
-    Implements the 5-angle geometric model (Polyhach et al., 2007).
+    Simulate an oriented (single-crystal) DEER trace for a rigid spin pair
+    using the Polyhach et al. (2007) 5-angle geometric model.
+
+    In this model the five angles are:
+        theta_r1, phi_r1 : orientation of the interspin vector **r** in the
+                           g-tensor principal-axis frame of spin label 1.
+        alpha, beta, gamma: ZYZ Euler angles rotating the g-tensor frame of
+                            label 1 into that of label 2.
+
+    For a **single-crystal** experiment the external field B₀ is fixed along
+    the z-axis of the lab frame.  The dipolar coupling frequency depends on
+    the angle between **r** and B₀, which is theta_r1 when the molecule is
+    oriented so that spin-1's g-frame z-axis is aligned with B₀.
+
+    For full orientation-selection (selecting a sub-set of B₀ orientations via
+    the observer pulse bandwidth) the four remaining angles (phi_r1, alpha,
+    beta, gamma) are needed; that extension is deferred to a future version.
 
     Args:
-        distance: Inter-spin distance r.
-        relative_orientation: (5,) angles (theta_r1, phi_r1, alpha, beta, gamma).
-        time: (T,) time points.
+        distance: Inter-spin distance r in Angstroms.
+        relative_orientation: (5,) angles (theta_r1, phi_r1, alpha, beta, gamma)
+            in radians.  Only theta_r1 is used in the current implementation.
+        time: (T,) time points in microseconds.
         modulation_depth: Modulation depth λ.
 
     Returns:
-        V(t) normalized DEER signal.
+        V(t) normalised DEER signal of shape (T,).
     """
-    # Dipolar frequency constant C = 52040 MHz*A^3
+    # Dipolar frequency constant C = 52040 MHz·Å³
     nu_max = 52040.0 / (distance**3)
 
-    # Simple average over a set of B0 orientations (uniform grid)
-    def compute_single_B0(theta: jnp.ndarray) -> jnp.ndarray:
-        # nu_dd = nu_max * (1 - 3*cos^2(theta))
-        nu_dd = nu_max * (1.0 - 3.0 * jnp.cos(theta) ** 2)
-        omega = 2.0 * jnp.pi * nu_dd
-        return 1.0 - modulation_depth * (1.0 - jnp.cos(omega * time))
+    # theta_r1: polar angle of the interspin vector relative to B₀ in the
+    # single-crystal (oriented) frame.
+    theta_r1 = relative_orientation[0]
 
-    # Grid of field orientations
-    thetas = jnp.linspace(0, jnp.pi, 20)
-    traces = jax.vmap(compute_single_B0)(thetas)
+    # Dipolar coupling frequency at this fixed orientation.
+    # ν_dd = ν_max · (1 − 3·cos²θ)  — changes sign through the magic angle.
+    nu_dd = nu_max * (1.0 - 3.0 * jnp.cos(theta_r1) ** 2)
+    omega = 2.0 * jnp.pi * nu_dd
 
-    # Sin(theta) weighted average for powder pattern
-    weights = jnp.sin(thetas)
-    weights /= jnp.sum(weights)
-
-    return jnp.sum(traces * weights[:, None], axis=0)
+    # Single-crystal DEER trace (no powder average over θ).
+    return 1.0 - modulation_depth * (1.0 - jnp.cos(omega * time))
