@@ -18,6 +18,14 @@
 
 ---
 
+## 📚 Tutorials
+
+Experience **diff-epr** directly in your browser:
+
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins/diff-epr/blob/main/examples/deer_spectroscopy_tutorial.ipynb) **DEER Spectroscopy Simulation** — Learn how to simulate time-domain traces from distance distributions and rotamer clouds.
+
+---
+
 ## 🏗️ Technical Architecture
 
 - **Backend:** JAX (XLA-compiled).
