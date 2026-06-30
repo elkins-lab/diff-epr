@@ -20,5 +20,5 @@ repos:
     rev: v1.15.0
     hooks:
       - id: mypy
-        additional_dependencies: ["jax", "jaxlib", "numpy", "biotite"]
+        additional_dependencies: ["jax", "jaxlib", "numpy<2"]
         args: [--ignore-missing-imports]

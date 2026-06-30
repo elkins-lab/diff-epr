@@ -1,5 +1,5 @@
 site_name: diff-epr
-site_url: https://elkins.github.io/diff-epr/
+site_url: https://elkins-lab.github.io/diff-epr/
 site_description: Differentiable EPR simulation in JAX
 site_author: George Elkins
 

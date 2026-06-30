@@ -1,6 +1,6 @@
 # 📻 diff-epr: Differentiable EPR/DEER Simulation in JAX
 
-[![Tests](https://github.com/elkins/diff-epr/actions/workflows/test.yml/badge.svg)](https://github.com/elkins/diff-epr/actions/workflows/test.yml)
+[![Tests](https://github.com/elkins-lab/diff-epr/actions/workflows/test.yml/badge.svg)](https://github.com/elkins-lab/diff-epr/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![JAX](https://img.shields.io/badge/backend-JAX-9cf.svg)](https://github.com/google/jax)
 
@@ -22,7 +22,7 @@
 
 Experience **diff-epr** directly in your browser:
 
-- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins/diff-epr/blob/main/examples/interactive_tutorials/deer_spectroscopy_tutorial.ipynb) **DEER Spectroscopy Simulation** — Learn how to simulate time-domain traces from distance distributions and rotamer clouds.
+- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins-lab/diff-epr/blob/main/examples/interactive_tutorials/deer_spectroscopy_tutorial.ipynb) **DEER Spectroscopy Simulation** — Learn how to simulate time-domain traces from distance distributions and rotamer clouds.
 
 ---
 
@@ -61,10 +61,10 @@ pip install diff-epr
 
 diff-epr is part of the **differentiable biophysics** ecosystem:
 
-- [diff-biophys](https://github.com/elkins/diff-biophys) — Core differentiable biophysics engine.
-- [diff-hdx](https://github.com/elkins/diff-hdx) — Differentiable HDX-MS prediction.
-- [diff-fret](https://github.com/elkins/diff-fret) — Differentiable FRET modeling.
-- [synth-nmr](https://github.com/elkins/synth-nmr) — NMR observable simulation.
+- [diff-biophys](https://github.com/elkins-lab/diff-biophys) — Core differentiable biophysics engine.
+- [diff-hdx](https://github.com/elkins-lab/diff-hdx) — Differentiable HDX-MS prediction.
+- [diff-fret](https://github.com/elkins-lab/diff-fret) — Differentiable FRET modeling.
+- [synth-nmr](https://github.com/elkins-lab/synth-nmr) — NMR observable simulation.
 
 ---
 
@@ -75,8 +75,8 @@ diff-epr is part of the **differentiable biophysics** ecosystem:
   author  = {Elkins, George},
   title   = {diff-epr: Differentiable EPR/DEER simulation in JAX},
   year    = {2026},
-  url     = {https://github.com/elkins/diff-epr},
-  version = {0.1.0}
+  url     = {https://github.com/elkins-lab/diff-epr},
+  version = {0.1.1}
 }
 ```
 
